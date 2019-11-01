@@ -16,6 +16,7 @@ import DragConstants from '../lib/drag-constants';
 import TargetPaneComponent from '../components/target-pane/target-pane.jsx';
 import spriteLibraryContent from '../lib/libraries/sprites.json';
 import {handleFileUpload, spriteUpload} from '../lib/file-uploader.js';
+import handleDataFileUpload from '../lib/data-file-uploader.js';
 import sharedMessages from '../lib/shared-messages';
 import {emptySprite} from '../lib/empty-assets';
 import {highlightTarget} from '../reducers/targets';
@@ -46,7 +47,10 @@ class TargetPane extends React.Component {
             'handlePaintSpriteClick',
             'handleFileUploadClick',
             'handleSpriteUpload',
-            'setFileInput'
+            'handleDataFileUpload',
+            'handleDataFileUploadClick',
+            'setFileInput',
+            'setDataFileInput'
         ]);
     }
     componentDidMount () {
@@ -151,6 +155,16 @@ class TargetPane extends React.Component {
             }, this.props.onCloseImporting);
         }, this.props.onCloseImporting);
     }
+    handleDataFileUpload(e) {
+        handleDataFileUpload(e.target, this.props.vm.addDataFile, () => alert("ERROR"));
+    }
+    setDataFileInput(input) {
+        this.dataFileInput = input;
+    }
+    handleDataFileUploadClick() {
+        this.dataFileInput.click();
+    }
+
     setFileInput (input) {
         this.fileInput = input;
     }
@@ -216,6 +230,7 @@ class TargetPane extends React.Component {
             <TargetPaneComponent
                 {...componentProps}
                 fileInputRef={this.setFileInput}
+                dataFileInputRef={this.setDataFileInput}
                 onActivateBlocksTab={this.handleActivateBlocksTab}
                 onChangeSpriteDirection={this.handleChangeSpriteDirection}
                 onChangeSpriteName={this.handleChangeSpriteName}
@@ -229,9 +244,11 @@ class TargetPane extends React.Component {
                 onDuplicateSprite={this.handleDuplicateSprite}
                 onExportSprite={this.handleExportSprite}
                 onFileUploadClick={this.handleFileUploadClick}
+                onDataFileUploadClick={this.handleDataFileUploadClick}
                 onPaintSpriteClick={this.handlePaintSpriteClick}
                 onSelectSprite={this.handleSelectSprite}
                 onSpriteUpload={this.handleSpriteUpload}
+                onDataFileUpload={this.handleDataFileUpload}
                 onSurpriseSpriteClick={this.handleSurpriseSpriteClick}
             />
         );

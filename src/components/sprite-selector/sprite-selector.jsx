@@ -37,7 +37,23 @@ const messages = defineMessages({
         id: 'gui.spriteSelector.addSpriteFromFile',
         description: 'Button to add a sprite in the target pane from file',
         defaultMessage: 'Upload Sprite'
-    }
+    },
+
+    uploadLocalFile: {
+        id: 'gui.spriteSelector.uploadLocalFile',
+        description: 'Button to upload a local file',
+        defaultMessage: 'Upload Local File'
+    },
+    uploadWebFile: {
+        id: 'gui.spriteSelector.uploadWebFile',
+        description: 'Button to upload a web file',
+        defaultMessage: 'Upload Web File'
+    },
+    removeFile: {
+        id: 'gui.spriteSelector.removeFile',
+        description: 'Button to remove an uploaded file',
+        defaultMessage: 'Remove File'
+    },
 });
 
 const SpriteSelectorComponent = function (props) {
@@ -61,10 +77,13 @@ const SpriteSelectorComponent = function (props) {
         onPaintSpriteClick,
         onSelectSprite,
         onSpriteUpload,
+        onDataFileUpload,
+        onDataFileUploadClick,
         onSurpriseSpriteClick,
         raised,
         selectedId,
         spriteFileInput,
+        dataFileInput,
         sprites,
         stageSize,
         ...componentProps
@@ -75,6 +94,10 @@ const SpriteSelectorComponent = function (props) {
         selectedSprite = {};
         spriteInfoDisabled = true;
     }
+
+    //Detect if data tools extensions is loaded
+    let hasDataTools = document.getElementsByClassName("scratchCategoryId-datatools").length > 0;
+
     return (
         <Box
             className={styles.spriteSelector}
@@ -112,6 +135,31 @@ const SpriteSelectorComponent = function (props) {
                 onExportSprite={onExportSprite}
                 onSelectSprite={onSelectSprite}
             />
+
+            {hasDataTools && <ActionMenu
+                className={styles.fileButton}
+                img={fileUploadIcon}
+                moreButtons={[
+                    {
+                        title: intl.formatMessage(messages.removeFile),
+                        img: surpriseIcon,
+                        onClick: onSurpriseSpriteClick // TODO need real function for this
+                    },
+                    {
+                        title: intl.formatMessage(messages.uploadWebFile),
+                        img: fileUploadIcon,
+                        onClick: onDataFileUploadClick,
+                        fileAccept: '.csv, .xml, .json, application/json',
+                        fileChange: onDataFileUpload,
+                        fileInput: dataFileInput,
+                        fileMultiple: false
+                    }
+                ]}
+                title={intl.formatMessage(messages.uploadLocalFile)}
+                tooltipPlace={isRtl(intl.locale) ? 'right' : 'left'}
+                onClick={onDataFileUploadClick}
+            />}
+
             <ActionMenu
                 className={styles.addButton}
                 img={spriteIcon}
@@ -169,6 +217,7 @@ SpriteSelectorComponent.propTypes = {
     onPaintSpriteClick: PropTypes.func,
     onSelectSprite: PropTypes.func,
     onSpriteUpload: PropTypes.func,
+    onDataFileUpload: PropTypes.func,
     onSurpriseSpriteClick: PropTypes.func,
     raised: PropTypes.bool,
     selectedId: PropTypes.string,
