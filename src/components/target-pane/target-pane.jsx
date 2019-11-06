@@ -42,6 +42,8 @@ const TargetPane = ({
     onSelectSprite,
     onSpriteUpload,
     onDataFileUpload,
+    onDataFileRemove,
+    onWebFileUpload,
     onSurpriseSpriteClick,
     raiseSprites,
     stage,
@@ -82,6 +84,8 @@ const TargetPane = ({
             onSelectSprite={onSelectSprite}
             onSpriteUpload={onSpriteUpload}
             onDataFileUpload={onDataFileUpload}
+            onDataFileRemove={onDataFileRemove}
+            onWebFileUpload={onWebFileUpload}
             onSurpriseSpriteClick={onSurpriseSpriteClick}
         />
         <div className={styles.stageSelectorWrapper}>
@@ -158,6 +162,8 @@ TargetPane.propTypes = {
     onSpriteUpload: PropTypes.func,
     onDataFileUpload: PropTypes.func,
     onDataFileUploadClick: PropTypes.func,
+    onDataFileRemove: PropTypes.func,
+    onWebFileUpload: PropTypes.func,
     onSurpriseSpriteClick: PropTypes.func,
     raiseSprites: PropTypes.bool,
     spriteLibraryVisible: PropTypes.bool,

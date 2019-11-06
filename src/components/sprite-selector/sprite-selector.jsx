@@ -17,6 +17,9 @@ import spriteIcon from '../action-menu/icon--sprite.svg';
 import surpriseIcon from '../action-menu/icon--surprise.svg';
 import searchIcon from '../action-menu/icon--search.svg';
 
+import removeIcon from '../action-menu/icon--remove.svg';
+import internetIcon from '../action-menu/icon--internet.svg';
+
 const messages = defineMessages({
     addSpriteFromLibrary: {
         id: 'gui.spriteSelector.addSpriteFromLibrary',
@@ -78,6 +81,8 @@ const SpriteSelectorComponent = function (props) {
         onSelectSprite,
         onSpriteUpload,
         onDataFileUpload,
+        onDataFileRemove,
+        onWebFileUpload,
         onDataFileUploadClick,
         onSurpriseSpriteClick,
         raised,
@@ -142,17 +147,28 @@ const SpriteSelectorComponent = function (props) {
                 moreButtons={[
                     {
                         title: intl.formatMessage(messages.removeFile),
-                        img: surpriseIcon,
-                        onClick: onSurpriseSpriteClick // TODO need real function for this
+                        img: removeIcon,
+                        onClick: onDataFileRemove,
+                        largeImg: true
                     },
                     {
                         title: intl.formatMessage(messages.uploadWebFile),
+                        img: internetIcon,
+                        onClick: onWebFileUpload,
+                        fileAccept: '.csv, .xml, .json, application/json',
+                        fileChange: onDataFileUpload,
+                        fileInput: dataFileInput,
+                        fileMultiple: true,
+                        largeImg: true
+                    },
+                    {
+                        title: intl.formatMessage(messages.uploadLocalFile),
                         img: fileUploadIcon,
                         onClick: onDataFileUploadClick,
                         fileAccept: '.csv, .xml, .json, application/json',
                         fileChange: onDataFileUpload,
                         fileInput: dataFileInput,
-                        fileMultiple: false
+                        fileMultiple: true
                     }
                 ]}
                 title={intl.formatMessage(messages.uploadLocalFile)}
@@ -218,6 +234,8 @@ SpriteSelectorComponent.propTypes = {
     onSelectSprite: PropTypes.func,
     onSpriteUpload: PropTypes.func,
     onDataFileUpload: PropTypes.func,
+    onDataFileRemove: PropTypes.func,
+    onWebFileUpload: PropTypes.func,
     onSurpriseSpriteClick: PropTypes.func,
     raised: PropTypes.bool,
     selectedId: PropTypes.string,

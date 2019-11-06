@@ -12,6 +12,17 @@ const extractFileName = function(nameExt) {
     return nameParts[0];
 };
 
+/**
+ * Handle downloading a web file from a given URL 
+ * @param {string} url The URL of the file
+ * @param {Function} onComplete The function that handles the parsed data
+ * @param {Function} onError The function that handles any error loading the file
+ */
+const handleWebFileUpload = function(url, onComplete, onError) {
+  //Handle web file upload
+  onComplete(url, [{ "name": "testFile", "num": 123 }]);
+}
+
 
 /**
  * Handle the upload and parse of a data file (csv, XML, and JSON supported)
@@ -20,55 +31,60 @@ const extractFileName = function(nameExt) {
  * @param {Function} onError The function that handles any error loading the file
  */
 const handleDataFileUpload = function(fileInput, onComplete, onError) {
-  const file = fileInput.files[0];
-  if(fileInput.files.length !== 1) {
+  if(fileInput.files.length === 0) {
     return;
   }
 
-  const fileName = extractFileName(file.name);
+  for(let i = 0; i < fileInput.files.length; i++) {
+    let file = fileInput.files[i];
+    let fileName = extractFileName(file.name);
 
-  //CSV File
-  if(file.type === "application/vnd.ms-excel") {
-    const config = {
-      header: true,
-      complete: ((results) => handleResult(results.data, fileName, onComplete))
-    };
-  
-    Papa.parse(file, config);     
-  }
-  //XML File
-  else if(file.type === "text/xml") {
-    let reader = new FileReader();
-    reader.onloadend = (() => {
-      const results = convert.xml2js(reader.result, { compact: true, nativeType: true });    // to convert xml text to javascript object
-      
-      //Re-parse objects to remove _text property
-      const rows = results.root.row;
-      const newRows = rows.map((row) => {
-        let newRow = {};
-        for (let key in row) {
-          if (row.hasOwnProperty(key)) {
-              newRow[key] = row[key]._text;
+    //CSV File
+    if(file.type === "application/vnd.ms-excel") {
+      const config = {
+        header: true,
+        complete: ((results) => handleResult(results.data, fileName, onComplete))
+      };
+    
+      Papa.parse(file, config);     
+    }
+    //XML File
+    else if(file.type === "text/xml") {
+      let reader = new FileReader();
+      reader.onloadend = (() => {
+        const results = convert.xml2js(reader.result, { compact: true, nativeType: true });    // to convert xml text to javascript object
+        
+        //Re-parse objects to remove _text property
+        const rows = results.root.row;
+        const newRows = rows.map((row) => {
+          let newRow = {};
+          for (let key in row) {
+            if (row.hasOwnProperty(key)) {
+                newRow[key] = row[key]._text;
+            }
           }
-        }
-        return newRow;
+          return newRow;
+        });
+    
+        handleResult(newRows, fileName, onComplete);
       });
+      reader.readAsText(file);
+    }
+    else if(file.type ==="application/json") {
+      let reader = new FileReader();
+      reader.onloadend = (() => {
+        const results = JSON.parse(reader.result);
+        handleResult(results, fileName, onComplete);
+      });
+      reader.readAsText(file);
+    }
+    else {
+      onError("Invalid file type.");
+    }
+  }
   
-      handleResult(newRows, fileName, onComplete);
-    });
-    reader.readAsText(file);
-  }
-  else if(file.type ==="application/json") {
-    let reader = new FileReader();
-    reader.onloadend = (() => {
-      const results = JSON.parse(reader.result);
-      handleResult(results, fileName, onComplete);
-    });
-    reader.readAsText(file);
-  }
-  else {
-    onError("Invalid file type.");
-  }
+  //Clear input once we've processed all of the files
+  fileInput.value = null;
 }
 
 
@@ -131,4 +147,7 @@ const parseNumber = function(value, locale = navigator.language) {
   return parseFloat(normalized);
 }
 
-export default handleDataFileUpload;
+export {
+  handleDataFileUpload, 
+  handleWebFileUpload
+};
