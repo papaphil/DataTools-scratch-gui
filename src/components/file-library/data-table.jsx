@@ -1,18 +1,61 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import DataTableInput from './data-table-input.jsx';
 
 import styles from './data-table.css';
 
+const defaultState = {
+  selectedRow: -1,
+  selectedCol: -1
+}
+
 class DataTable extends Component {
+    constructor(props) {
+      super(props);
+
+      this.state = defaultState
+
+      this.tableCellClicked = this.tableCellClicked.bind(this);
+      this.handleTableChange = this.handleTableChange.bind(this);
+      this.onEditingCancel = this.onEditingCancel.bind(this);
+    }
+
+    handleTableChange(value) {
+      let { selectedRow, selectedCol } = this.state;
+      this.props.onDataChange(selectedRow, selectedCol, value);
+      this.setState(defaultState);
+    }
+
+    tableCellClicked(row, col) {
+      this.setState({
+        selectedRow: row,
+        selectedCol: col
+      });
+    }
+
+    onEditingCancel() {
+      this.setState(defaultState);
+    }
 
     renderTableData() {
       let { data, header } = this.props;
-      return data.map((obj, index) => {
+      return data.map((obj, row) => {
         return (
-            <tr key={index}>
-              <td className={styles.rowNum}>{index + 1}</td>
-              {header.map((prop, idx) => {
-                  return <td key={idx} className={styles.rowData}>{obj[prop]}</td>
+            <tr key={row}>
+              <td className={styles.rowNum}>{row + 1}</td>
+              {header.map((prop, col) => {
+                  if(this.state.selectedRow === row && this.state.selectedCol === col) {
+                    return (
+                      <td key={col} className={classNames(styles.rowData, styles.editing)}>
+                        <DataTableInput defaultValue={obj[prop]} onAccept={this.handleTableChange} onCancel={this.onEditingCancel}/>
+                      </td>
+                    )
+                  }
+                  else {
+                    return <td key={col} className={styles.rowData} onClick={(e) => this.tableCellClicked(row, col)}>{obj[prop]}</td>
+                  }
                 })
               }
             </tr>
@@ -51,6 +94,7 @@ class DataTable extends Component {
 DataTable.propTypes = {
   data: PropTypes.array.isRequired,
   header: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onDataChange: PropTypes.func.isRequired
 }
 
 export default DataTable

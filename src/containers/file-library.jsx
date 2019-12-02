@@ -13,6 +13,7 @@ import Spinner from '../components/spinner/spinner.jsx';
 import DataTable from '../components/file-library/data-table.jsx';
 
 import styles from '../components/library/library.css';
+import tableStyles from '../components/file-library/data-table.css';
 
 const messages = defineMessages({
     libraryTitle: {
@@ -28,7 +29,8 @@ class FileLibrary extends React.PureComponent {
         bindAll(this, [
             'setFilteredDataRef',
             'handleFileNameClick',
-            'getColumns'
+            'getColumns',
+            'handleDataChange'
         ]);
 
         this.state = {
@@ -81,6 +83,14 @@ class FileLibrary extends React.PureComponent {
         }
         return columns;
     }
+
+    handleDataChange(row, col, value) {
+        let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
+        let colName = this.getColumns()[col];
+
+        let newData = this.props.vm.updateDataFile(fileName, row, colName, value);
+        this.setState({ fileData: newData });
+    }
  
     render () {
         return (
@@ -91,18 +101,6 @@ class FileLibrary extends React.PureComponent {
                 onRequestClose={this.props.onRequestClose}
             >
             <div className={styles.filterBar}>
-                {/* <Filter
-                    className={classNames(
-                        styles.filterBarItem,
-                        styles.filter
-                    )}
-                    filterQuery={this.state.filterQuery}
-                    inputClassName={styles.filterInput}
-                    placeholderText="Search"
-                    onChange={this.handleFilterChange}
-                    onClear={this.handleFilterClear}
-                />
-                <Divider className={classNames(styles.filterBarItem, styles.divider)} /> */}
                 <div className={styles.tagWrapper}>
                     {this.state.fileNames.map((tagProps, id) => (
                         <TagButton
@@ -124,7 +122,7 @@ class FileLibrary extends React.PureComponent {
                 ref={this.setFilteredDataRef}
             >
                 {this.state.loaded ? (
-                    <DataTable data={this.state.fileData} header={this.getColumns()}/>
+                    <DataTable data={this.state.fileData} header={this.getColumns()} onDataChange={this.handleDataChange}/>
                 ) : (
                     <div className={styles.spinnerWrapper}>
                         <Spinner
