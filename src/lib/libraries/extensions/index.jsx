@@ -16,6 +16,9 @@ import text2speechInsetIconURL from './text2speech/text2speech-small.svg';
 import translateIconURL from './translate/translate.png';
 import translateInsetIconURL from './translate/translate-small.png';
 
+import dataToolsIconURL from './datatools/background.png';
+import dataToolsInsetIconURL from './datatools/translate-small.png';
+
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 
@@ -150,6 +153,34 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true
+    },
+    {
+        name: "Data Tools",
+        extensionId: 'datatools',
+        collaborator: 'KSU senior design',
+        iconURL: dataToolsIconURL,
+        insetIconURL: dataToolsInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Interact with outside Data."
+                description="Description for the Data Tools extension."
+                id="gui.extension.datatools.description"
+            />
+        ),
+        featured: true,
+        bluetoothRequired: true,
+        internetConnectionRequired: true,
+        launchFileSelection: true,
+        useAutoScan: false,
+        connectionIconURL: microbitConnectionIconURL,
+        connectionSmallIconURL: microbitConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their micro:bit."
+                id="gui.extension.microbit.connectingMessage"
+            />
+        )
     },
     {
         name: 'Makey Makey',
