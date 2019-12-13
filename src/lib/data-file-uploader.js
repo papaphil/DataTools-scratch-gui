@@ -1,7 +1,5 @@
 import Papa from 'papaparse';
 import convert from 'xml-js';
-import { is } from 'immutable';
-
 
 /**
  * Extract the file name given a string of the form fileName + ext
@@ -13,8 +11,6 @@ const extractFileName = function(nameExt) {
     const nameParts = nameExt.split('.', 1);
     return nameParts[0];
 };
-
-
 
 
 /**
