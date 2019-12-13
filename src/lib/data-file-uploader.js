@@ -12,17 +12,6 @@ const extractFileName = function(nameExt) {
     return nameParts[0];
 };
 
-/**
- * Handle downloading a web file from a given URL 
- * @param {string} url The URL of the file
- * @param {Function} onComplete The function that handles the parsed data
- * @param {Function} onError The function that handles any error loading the file
- */
-const handleWebFileUpload = function(url, onComplete, onError) {
-  //Handle web file upload
-  onComplete(url, [{ "name": "testFile", "num": 123 }]);
-}
-
 
 /**
  * Handle the upload and parse of a data file (csv, XML, and JSON supported)
@@ -43,6 +32,7 @@ const handleDataFileUpload = function(fileInput, onComplete, onError) {
     if(file.type === "application/vnd.ms-excel") {
       const config = {
         header: true,
+        skipEmptyLines: true,
         complete: ((results) => handleResult(results.data, fileName, onComplete))
       };
     
@@ -87,6 +77,63 @@ const handleDataFileUpload = function(fileInput, onComplete, onError) {
   fileInput.value = null;
 }
 
+/**
+ * Handle downloading a web file from a given URL 
+ * @param {string} url The URL of the file
+ * @param {Function} onComplete The function that handles the parsed data
+ * @param {Function} onError The function that handles any error loading the file
+ */
+const handleWebFileUpload = function(url, onComplete, onError) {
+  //Handle web file upload
+  var last = url.substring(url.lastIndexOf("/")+1, url.length);
+  var fileName = extractFileName(last);
+  var fileType = last.substring(last.lastIndexOf(".")+1, last.length);
+  var reader = new FileReader();
+  if(fileType === "csv"){
+    reader.onload = function(){
+      var dataURL = reader.result;
+      var last = url.substring(url.lastIndexOf("/")+1, url.length);
+      var fileName = extractFileName(last);
+      Papa.parse(dataURL, {header: true, skipEmptyLines: true,
+      complete: (results) => handleResult(results.data, fileName, onComplete)});
+    };
+  }
+  else if(fileType === "xml"){
+    reader.onload = function() {
+      const results = convert.xml2js(reader.result, { compact: true, nativeType: true });    // to convert xml text to javascript object
+      
+        //Re-parse objects to remove _text property
+        const rows = results.root.row;
+        const newRows = rows.map((row) => {
+          let newRow = {};
+          for (let key in row) {
+            if (row.hasOwnProperty(key)) {
+                newRow[key] = row[key]._text;
+            }
+          }
+          return newRow;
+        });
+    
+        handleResult(newRows, fileName, onComplete);
+    };
+  }
+  else if(fileType === "json") {
+    reader.onload = function(){
+      const results = JSON.parse(reader.result);
+      console.log(results);
+      //onComplete(fileName, results);
+      handleResult(results, fileName, onComplete);
+    };
+  }
+  else{
+    alert("file type not supported");
+    return;
+  }
+  fetch(url)
+  .then(response => response.blob()).then(function(blob){reader.readAsText(blob);}).catch(function(error) {
+    console.log(JSON.stringify(error));
+  });   
+}
 
 /**
  * A function to handle the result of parsing a file, parses any 
@@ -101,9 +148,10 @@ const handleResult = function(results, fileName, onComplete) {
     for (let key in row) {
       if (row.hasOwnProperty(key)) {
           if(typeof(row[key]) === "string" && checkIfNum(row[key])) {
-            newRow[key] = parseNumber(row[key]);
+            var num = parseNumber(row[key]);
+            newRow[key] = num;
           }
-          else {
+          else{
             newRow[key] = row[key];
           }
       }
