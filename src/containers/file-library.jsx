@@ -13,6 +13,7 @@ import Spinner from '../components/spinner/spinner.jsx';
 import DataTable from '../components/file-library/data-table.jsx';
 
 import styles from '../components/library/library.css';
+import tableStyles from '../components/file-library/data-table.css';
 
 const messages = defineMessages({
     libraryTitle: {
@@ -28,7 +29,9 @@ class FileLibrary extends React.PureComponent {
         bindAll(this, [
             'setFilteredDataRef',
             'handleFileNameClick',
-            'getColumns'
+            'getColumns',
+            'handleDataChange',
+            'handleAddRow'
         ]);
 
         this.state = {
@@ -46,6 +49,9 @@ class FileLibrary extends React.PureComponent {
         let data = [];
         if(names[0].tag !== "NO FILES UPLOADED") {
             data = this.props.vm.getDataFileContents(names[0].tag);
+        }
+        else {
+            names = [];
         }
         this.setState({
             fileNames: names,
@@ -81,8 +87,38 @@ class FileLibrary extends React.PureComponent {
         }
         return columns;
     }
+
+    handleDataChange(row, col, value) {
+        let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
+        let colName = this.getColumns()[col];
+
+        let newData = this.props.vm.updateDataFile(fileName, row, colName, value);
+        this.setState({ fileData: newData });
+    }
+
+    handleAddRow() {
+        let { fileData } = this.state;
+        let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
+
+        let first = fileData[0];
+        let newRow = {};
+        Object.keys(first).map(key => {
+            if(typeof(first[key]) === 'number')
+                newRow[key] = 0;
+            else {
+                newRow[key] = '';
+            }
+        });
+
+        fileData.push(newRow);
+        this.setState({ fileData });
+        this.props.vm.addDataFileRow(fileName);
+        this.forceUpdate();
+    }
  
     render () {
+        let noFiles = this.state.fileNames.length === 0;
+        
         return (
             <Modal
                 fullScreen
@@ -91,18 +127,6 @@ class FileLibrary extends React.PureComponent {
                 onRequestClose={this.props.onRequestClose}
             >
             <div className={styles.filterBar}>
-                {/* <Filter
-                    className={classNames(
-                        styles.filterBarItem,
-                        styles.filter
-                    )}
-                    filterQuery={this.state.filterQuery}
-                    inputClassName={styles.filterInput}
-                    placeholderText="Search"
-                    onChange={this.handleFilterChange}
-                    onClear={this.handleFilterClear}
-                />
-                <Divider className={classNames(styles.filterBarItem, styles.divider)} /> */}
                 <div className={styles.tagWrapper}>
                     {this.state.fileNames.map((tagProps, id) => (
                         <TagButton
@@ -123,9 +147,26 @@ class FileLibrary extends React.PureComponent {
                 className={classNames(styles.libraryScrollGrid, styles.withFilterBar)}
                 ref={this.setFilteredDataRef}
             >
-                {this.state.loaded ? (
-                    <DataTable data={this.state.fileData} header={this.getColumns()}/>
-                ) : (
+                {this.state.loaded && !noFiles && (
+                    <DataTable 
+                        fileName={this.state.fileNames[this.state.selectedFileIndex].tag}
+                        data={this.state.fileData} 
+                        header={this.getColumns()} 
+                        onDataChange={this.handleDataChange}
+                        onAddRow={this.handleAddRow}/>
+                )}
+                {this.state.loaded && noFiles && (
+                    <div className={tableStyles.noFiles}>
+                        <p>No files have been uploaded.</p>
+                        <button
+                            title="Go back"
+                            onClick={this.props.onRequestClose}
+                        >
+                            Go back
+                        </button>
+                    </div>
+                )}
+                {!this.state.loaded && (
                     <div className={styles.spinnerWrapper}>
                         <Spinner
                             large

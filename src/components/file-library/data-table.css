@@ -1,15 +1,17 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+
 .data-table-wrapper {
   width: 100%;
   max-height: 100%;
   overflow: auto;
   border: 3px solid #ddd;
-  transition: all .3s ease-in-out
 }
 
 .data-table {
   text-align: center;
   border-collapse: collapse;
-  width: 100%;
+  min-width: 100%;
   cursor: text;
 }
 
@@ -19,8 +21,27 @@
   background-color: white;
 }
 
-.data-table tr:hover td.row-data{
+.data-table  td.row-data{
+  cursor: pointer;
+}
+
+.data-table td.row-data.editing {
+  border: 2px solid black;
+  padding: 0px;
+}
+
+.data-table td.row-data.highlighted {
+  background-color: yellow;
+}
+
+
+.data-table  td.row-data:hover{
   background-color: #eee;
+}
+
+.data-table td.row-data.editing:hover {
+  cursor: text;
+  background-color: white;
 }
 
 .data-table th {
@@ -32,10 +53,149 @@
   position: sticky;
   top: -1px;
   z-index: 10;
+  border-top: none;
+}
+
+.data-table th.with-pagination {
+  top: 40px;
 }
 
 .data-table td.row-num {
   width: 35px;
   background-color: grey;
   color: white;
+  cursor: pointer;
 }
+
+.data-table td.row-num:hover,
+.data-table td.row-num.highlighted {
+  background-color: gold;
+}
+
+.data-table td.row-data .row-input-container {
+  height: 100%;
+  width:100%;
+  padding: 0px;
+  font-size: inherit;
+  position: relative;
+}
+
+.data-table td.row-data .row-input {
+  border: none; 
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding: 0px;
+  font-size: inherit;
+  top: 0px;
+  left: 0px;
+}
+
+.data-table td.row-data .row-input:focus {
+  outline: none;
+}
+
+.data-table td.add-row {
+  font-size: 18px;
+}
+
+.header-paginator {
+  width: 100%;
+  height: 40px;
+  position: sticky;
+  top: 0px;
+  left: 0px;
+  background-color: #4CAF50;
+  border-bottom: 1px solid white;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  line-height: 40px;
+}
+
+.skip-icon {
+  position: absolute;
+  height: 20px;
+  top: 10px;
+  cursor: pointer;
+  transition: .2s all ease-in-out
+}
+
+.skip-icon.far-right {
+  right: 30%;
+}
+
+.skip-icon.right {
+  right: 35%;
+}
+
+.skip-icon.left {
+  left: 35%;
+  transform: scaleX(-1);
+}
+
+.skip-icon.far-left {
+  left: 30%;
+  transform: scaleX(-1);
+}
+
+.skip-icon.right:hover,
+.skip-icon.far-right:hover {
+  transform: scale(1.2);
+}
+
+.skip-icon.far-left:hover,
+.skip-icon.left:hover {
+  transform: scaleX(-1) scale(1.2);
+}
+
+.icon {
+  position: absolute;
+  top: -.2rem;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+}
+
+.icon.check {
+  right: 4rem;
+}
+
+.icon.x {
+  right: 2.25rem;
+}
+
+.no-files {
+  width: 100%;
+  height: 100%;
+  padding-top: 100px;
+  text-align: center;
+}
+
+.no-files p {
+  font-size: 45px;
+  color: gray;
+}
+
+.no-files button,
+.add-row button {
+  border: 1px solid $motion-primary;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  font-size: .875rem;
+  cursor: pointer;
+  background: $motion-primary;
+  color: white;
+  transition: .2s all ease-in-out;
+}
+
+.no-files button:hover,
+.add-row button:hover {
+  transform: scale(1.05);
+}
+
