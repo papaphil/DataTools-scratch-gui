@@ -36,6 +36,7 @@ const handleDataFileUpload = function(fileInput, onComplete, onError) {
     if(file.type === "application/vnd.ms-excel") {
       const config = {
         header: true,
+        skipEmptyLines: true,
         complete: ((results) => handleResult(results.data, fileName, onComplete))
       };
     
@@ -97,14 +98,14 @@ const handleWebFileUpload = function(url, onComplete, onError) {
       var dataURL = reader.result;
       var last = url.substring(url.lastIndexOf("/")+1, url.length);
       var fileName = extractFileName(last);
-      Papa.parse(dataURL, {header: true,
+      Papa.parse(dataURL, {header: true, skipEmptyLines: true,
       complete: (results) => handleResult(results.data, fileName, onComplete)});
     };
   }
   else if(fileType === "xml"){
     reader.onload = function() {
       const results = convert.xml2js(reader.result, { compact: true, nativeType: true });    // to convert xml text to javascript object
-        
+      
         //Re-parse objects to remove _text property
         const rows = results.root.row;
         const newRows = rows.map((row) => {
@@ -152,17 +153,12 @@ const handleResult = function(results, fileName, onComplete) {
       if (row.hasOwnProperty(key)) {
           if(typeof(row[key]) === "string" && checkIfNum(row[key])) {
             var num = parseNumber(row[key]);
-            if(!isNaN(num)){
-              newRow[key] = num;
-              console.log(newRow[key]); 
-            }
-            
+            newRow[key] = num;
           }
           else{
             newRow[key] = row[key];
           }
       }
-      //console.log(newRow);
     }
     return newRow;
   });

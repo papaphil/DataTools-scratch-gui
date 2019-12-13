@@ -4,7 +4,7 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import ReactModal from 'react-modal';
 import VM from "scratch-vm";
-import {handleDataFileUpload} from '../../lib/data-file-uploader'
+import {handleDataFileUpload, handleWebFileUpload} from '../../lib/data-file-uploader'
 import Box from '../box/box.jsx';
 import styles from './file-modal.css';
 import CloseButton from '../close-button/close-button.jsx';
@@ -45,6 +45,11 @@ const messages = defineMessages({
         defaultMessage: 'Upload a data file from anywhere on the web!',
         description: 'Tooltip for upload web file button',
         id: 'gui.telemetryOptIn.TooltipWebFile'
+    },
+    enterButton: {
+        defaultMessage: 'Enter',
+        description: 'enter button',
+        id: 'gui.fileModal.Enter'
     }
 });
 
@@ -59,11 +64,9 @@ class FileModal extends React.PureComponent {
             'handleCancel',
             'setFileInputRef'
         ]);
-
-        this.state = {
-            uploadingWeb: false,
-        }
-
+            this.state = {
+                uploadingWeb: false,
+            }
         this.fileInput = null;
     }
 
@@ -75,10 +78,13 @@ class FileModal extends React.PureComponent {
         this.fileInput.click();
     }
 
-    handleWebFile () {
+    handleWebFile (e) {
         if(this.state.uploadingWeb)
         {
+            console.log(document.getElementById("url").value);
             this.setState({uploadingWeb: false});
+            handleWebFileUpload(document.getElementById("url").value, this.props.vm.addDataFile, (msg) => alert("Error uploading file: " + mssg));
+            this.handleCancel();
         }
         else{
             this.setState({ uploadingWeb: true });
@@ -105,26 +111,18 @@ class FileModal extends React.PureComponent {
     render () {
         var content = "";
         if(this.state.uploadingWeb) {
-            alert("This is not implemented yet...");
             content = (
                 <Box className={styles.buttonRow}>
+                    <input type = "url" id='url' className = {styles.url} placeholder="www.example.com/mycsv.csv"/>
                     <button
                         className={styles.optIn}
                         title={this.props.intl.formatMessage(messages.noTooltip)}
-                        onClick={this.handleLocalFile}
-                    >
-                        <FormattedMessage {...messages.noButton} />
-                    </button>
-                    <button
-                        className={styles.optIn}
-                        title={this.props.intl.formatMessage(messages.yesTooltip)}
                         onClick={this.handleWebFile}
                     >
-                        <FormattedMessage {...messages.yesButton} />
+                        <FormattedMessage {...messages.enterButton} />
                     </button>
                 </Box>
             );//this will change to be what we need for the web file upload
-            this.handleWebFile();
         }
         else {
             content = (
@@ -177,6 +175,7 @@ class FileModal extends React.PureComponent {
 FileModal.propTypes = {
     intl: intlShape.isRequired,
     isRtl: PropTypes.bool,
+    webFile: PropTypes.bool,
     onRequestClose: PropTypes.func,//necessary to close out of the popup
     vm: PropTypes.instanceOf(VM).isRequired
 };

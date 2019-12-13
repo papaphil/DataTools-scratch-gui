@@ -25,6 +25,10 @@
     color: $text-primary;
     overflow: hidden;
 }
+.button-row .url {
+    width: 400px;
+    margin-right: 0.5rem;
+}
 .fileInput {
     display: none;
 }

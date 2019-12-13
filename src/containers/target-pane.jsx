@@ -8,7 +8,9 @@ import {
     openSpriteLibrary,
     closeSpriteLibrary,
     openFileLibrary,
-    closeFileLibrary
+    closeFileLibrary,
+    openFileModal,
+    closeFileModal
 } from '../reducers/modals';
 import {activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX} from '../reducers/editor-tab';
 import {setReceivedBlocks} from '../reducers/hovered-target';
