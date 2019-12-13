@@ -106,7 +106,7 @@ class ActionMenu extends React.Component {
             title: mainTitle,
             moreButtons,
             tooltipPlace,
-            onClick,
+            onClick
         } = this.props;
 
         return (
@@ -142,7 +142,7 @@ class ActionMenu extends React.Component {
                 <div className={styles.moreButtonsOuter}>
                     <div className={styles.moreButtons}>
                         {(moreButtons || []).map(({img, title, onClick: handleClick,
-                            fileAccept, fileChange, fileInput, fileMultiple, largeImg}, keyId) => {
+                            fileAccept, fileChange, fileInput, fileMultiple}, keyId) => {
                             const isComingSoon = !handleClick;
                             const hasFileInput = fileInput;
                             const tooltipId = `${this.mainTooltipId}-${title}`;
@@ -158,7 +158,7 @@ class ActionMenu extends React.Component {
                                         onClick={hasFileInput ? handleClick : this.clickDelayer(handleClick)}
                                     >
                                         <img
-                                            className={largeImg ? styles.moreIconSmaller : styles.moreIcon}
+                                            className={styles.moreIcon}
                                             draggable={false}
                                             src={img}
                                         />
@@ -200,8 +200,7 @@ ActionMenu.propTypes = {
         fileAccept: PropTypes.string, // Optional, only for file upload
         fileChange: PropTypes.func, // Optional, only for file upload
         fileInput: PropTypes.func, // Optional, only for file upload
-        fileMultiple: PropTypes.bool, // Optional, only for file upload,
-        largeImg: PropTypes.bool, //SVG img needs scaled down
+        fileMultiple: PropTypes.bool // Optional, only for file upload
     })),
     onClick: PropTypes.func.isRequired,
     title: PropTypes.node.isRequired,

@@ -30,7 +30,6 @@ import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
-import FileModal from '../file-modal/file-modal.jsx';
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -102,11 +101,9 @@ const GUIComponent = props => {
         onClickLogo,
         onExtensionButtonClick,
         onProjectTelemetryEvent,
-        onProjectFileEvent,
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
         onRequestCloseTelemetryModal,
-        onRequestCloseFileModal,
         onSeeCommunity,
         onShare,
         onTelemetryModalCancel,
@@ -116,7 +113,6 @@ const GUIComponent = props => {
         soundsTabVisible,
         stageSizeMode,
         targetIsStage,
-        fileModalVisible,
         telemetryModalVisible,
         tipsLibraryVisible,
         vm,
@@ -167,12 +163,6 @@ const GUIComponent = props => {
                         onOptIn={onTelemetryModalOptIn}
                         onOptOut={onTelemetryModalOptOut}
                         onRequestClose={onRequestCloseTelemetryModal}
-                    />
-                ) : null}
-                {fileModalVisible ? (
-                    <FileModal
-                        vm = {vm}
-                        onRequestClose={onRequestCloseFileModal}
                     />
                 ) : null}
                 {loading ? (
@@ -234,7 +224,6 @@ const GUIComponent = props => {
                     onCloseAccountNav={onCloseAccountNav}
                     onLogOut={onLogOut}
                     onOpenRegistration={onOpenRegistration}
-                    onProjectFileEvent={onProjectFileEvent}
                     onProjectTelemetryEvent={onProjectTelemetryEvent}
                     onSeeCommunity={onSeeCommunity}
                     onShare={onShare}
@@ -410,7 +399,6 @@ GUIComponent.propTypes = {
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
     onRequestCloseTelemetryModal: PropTypes.func,
-    onRequestCloseFileModal: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onTabSelect: PropTypes.func,
@@ -424,7 +412,6 @@ GUIComponent.propTypes = {
     soundsTabVisible: PropTypes.bool,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     targetIsStage: PropTypes.bool,
-    fileModalVisible: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired

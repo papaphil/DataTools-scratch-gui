@@ -22,7 +22,6 @@ import {
 import {
     closeCostumeLibrary,
     closeBackdropLibrary,
-    closeFileModal,
     closeTelemetryModal,
     openExtensionLibrary
 } from '../reducers/modals';
@@ -138,7 +137,6 @@ GUI.propTypes = {
     projectHost: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     projectTitle: PropTypes.string,
-    fileModalVisible: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
@@ -176,7 +174,6 @@ const mapStateToProps = state => {
             state.scratchGui.targets.stage.id === state.scratchGui.targets.editingTarget
         ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
-        fileModalVisible: state.scratchGui.modals.fileModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
         vm: state.scratchGui.vm
     };
@@ -190,7 +187,6 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
     onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),
-    onRequestCloseFileModal: () => dispatch(closeFileModal()),
     onUpdateReduxProjectTitle: title => dispatch(setProjectTitle(title))
 });
 

@@ -9,14 +9,9 @@ const MODAL_LOADING_PROJECT = 'loadingProject';
 const MODAL_TELEMETRY = 'telemetryModal';
 const MODAL_SOUND_LIBRARY = 'soundLibrary';
 const MODAL_SPRITE_LIBRARY = 'spriteLibrary';
-const MODAL_FILE_LIBRARY = 'fileLibrary';
 const MODAL_SOUND_RECORDER = 'soundRecorder';
 const MODAL_CONNECTION = 'connectionModal';
-const MODAL_FILE = 'fileModal';
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
-
-//Putting this here for now
-const DATA_FILE_MENU = 'dataFileMenu';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -29,10 +24,7 @@ const initialState = {
     [MODAL_SPRITE_LIBRARY]: false,
     [MODAL_SOUND_RECORDER]: false,
     [MODAL_CONNECTION]: false,
-    [MODAL_TIPS_LIBRARY]: false,
-    [MODAL_FILE_LIBRARY]: false,
-    [MODAL_FILE]: false,
-    [DATA_FILE_MENU]: false,
+    [MODAL_TIPS_LIBRARY]: false
 };
 
 const reducer = function (state, action) {
@@ -86,17 +78,11 @@ const openSoundLibrary = function () {
 const openSpriteLibrary = function () {
     return openModal(MODAL_SPRITE_LIBRARY);
 };
-const openFileLibrary = function() {
-    return openModal(MODAL_FILE_LIBRARY);
-};  
 const openSoundRecorder = function () {
     return openModal(MODAL_SOUND_RECORDER);
 };
 const openConnectionModal = function () {
     return openModal(MODAL_CONNECTION);
-};
-const openFileModal = function () {
-    return openModal(MODAL_FILE);
 };
 const openTipsLibrary = function () {
     return openModal(MODAL_TIPS_LIBRARY);
@@ -122,9 +108,6 @@ const closeTelemetryModal = function () {
 const closeSpriteLibrary = function () {
     return closeModal(MODAL_SPRITE_LIBRARY);
 };
-const closeFileLibrary = function() {
-    return closeModal(MODAL_FILE_LIBRARY);
-};
 const closeSoundLibrary = function () {
     return closeModal(MODAL_SOUND_LIBRARY);
 };
@@ -137,14 +120,6 @@ const closeTipsLibrary = function () {
 const closeConnectionModal = function () {
     return closeModal(MODAL_CONNECTION);
 };
-const closeFileModal = function () {
-    return closeModal(MODAL_FILE);
-};
-
-const openDataFileMenu = function() {
-    return openModal(DATA_FILE_MENU);
-};
-
 export {
     reducer as default,
     initialState as modalsInitialState,
@@ -155,24 +130,19 @@ export {
     openLoadingProject,
     openSoundLibrary,
     openSpriteLibrary,
-    openFileLibrary,
     openSoundRecorder,
     openTelemetryModal,
     openTipsLibrary,
     openConnectionModal,
-    openFileModal,
     closeBackdropLibrary,
     closeCameraCapture,
     closeCostumeLibrary,
     closeExtensionLibrary,
     closeLoadingProject,
     closeSpriteLibrary,
-    closeFileLibrary,
     closeSoundLibrary,
     closeSoundRecorder,
     closeTelemetryModal,
     closeTipsLibrary,
-    closeConnectionModal,
-    closeFileModal,
-    openDataFileMenu
+    closeConnectionModal
 };

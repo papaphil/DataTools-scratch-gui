@@ -4,7 +4,6 @@ import React from 'react';
 import VM from 'scratch-vm';
 
 import SpriteLibrary from '../../containers/sprite-library.jsx';
-import FileLibrary from '../../containers/file-library.jsx';
 import SpriteSelectorComponent from '../sprite-selector/sprite-selector.jsx';
 import StageSelector from '../../containers/stage-selector.jsx';
 import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants';
@@ -20,10 +19,8 @@ import styles from './target-pane.css';
 const TargetPane = ({
     editingTarget,
     fileInputRef,
-    dataFileInputRef,
     hoveredTarget,
     spriteLibraryVisible,
-    fileLibraryVisible,
     onActivateBlocksTab,
     onChangeSpriteDirection,
     onChangeSpriteName,
@@ -37,17 +34,11 @@ const TargetPane = ({
     onDuplicateSprite,
     onExportSprite,
     onFileUploadClick,
-    onDataFileUploadClick,
     onNewSpriteClick,
-    onViewFilesClick,
     onPaintSpriteClick,
     onRequestCloseSpriteLibrary,
-    onRequestCloseFileLibrary,
     onSelectSprite,
     onSpriteUpload,
-    onDataFileUpload,
-    onDataFileRemove,
-    onWebFileUpload,
     onSurpriseSpriteClick,
     raiseSprites,
     stage,
@@ -67,7 +58,6 @@ const TargetPane = ({
             raised={raiseSprites}
             selectedId={editingTarget}
             spriteFileInput={fileInputRef}
-            dataFileInput={dataFileInputRef}
             sprites={sprites}
             stageSize={stageSize}
             onChangeSpriteDirection={onChangeSpriteDirection}
@@ -82,15 +72,10 @@ const TargetPane = ({
             onDuplicateSprite={onDuplicateSprite}
             onExportSprite={onExportSprite}
             onFileUploadClick={onFileUploadClick}
-            onDataFileUploadClick={onDataFileUploadClick}
             onNewSpriteClick={onNewSpriteClick}
-            onViewFilesClick={onViewFilesClick}
             onPaintSpriteClick={onPaintSpriteClick}
             onSelectSprite={onSelectSprite}
             onSpriteUpload={onSpriteUpload}
-            onDataFileUpload={onDataFileUpload}
-            onDataFileRemove={onDataFileRemove}
-            onWebFileUpload={onWebFileUpload}
             onSurpriseSpriteClick={onSurpriseSpriteClick}
         />
         <div className={styles.stageSelectorWrapper}>
@@ -110,15 +95,6 @@ const TargetPane = ({
                         vm={vm}
                         onActivateBlocksTab={onActivateBlocksTab}
                         onRequestClose={onRequestCloseSpriteLibrary}
-                    />
-                ) : null}
-            </div>
-            <div>
-                {fileLibraryVisible ? (
-                    <FileLibrary
-                        vm={vm}
-                        onActivateBlocksTab={onActivateBlocksTab}
-                        onRequestClose={onRequestCloseFileLibrary}
                     />
                 ) : null}
             </div>
@@ -150,7 +126,6 @@ TargetPane.propTypes = {
     editingTarget: PropTypes.string,
     extensionLibraryVisible: PropTypes.bool,
     fileInputRef: PropTypes.func,
-    dataFileInputRef: PropTypes.func,
     hoveredTarget: PropTypes.shape({
         hoveredSprite: PropTypes.string,
         receivedBlocks: PropTypes.bool
@@ -169,21 +144,14 @@ TargetPane.propTypes = {
     onExportSprite: PropTypes.func,
     onFileUploadClick: PropTypes.func,
     onNewSpriteClick: PropTypes.func,
-    onViewFilesClick: PropTypes.func,
     onPaintSpriteClick: PropTypes.func,
     onRequestCloseExtensionLibrary: PropTypes.func,
     onRequestCloseSpriteLibrary: PropTypes.func,
-    onRequestCloseFileLibrary: PropTypes.func,
     onSelectSprite: PropTypes.func,
     onSpriteUpload: PropTypes.func,
-    onDataFileUpload: PropTypes.func,
-    onDataFileUploadClick: PropTypes.func,
-    onDataFileRemove: PropTypes.func,
-    onWebFileUpload: PropTypes.func,
     onSurpriseSpriteClick: PropTypes.func,
     raiseSprites: PropTypes.bool,
     spriteLibraryVisible: PropTypes.bool,
-    fileLibraryVisible: PropTypes.bool,
     sprites: PropTypes.objectOf(spriteShape),
     stage: spriteShape,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,

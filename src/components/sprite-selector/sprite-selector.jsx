@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import {connect} from 'react-redux';
 
 import Box from '../box/box.jsx';
 import SpriteInfo from '../../containers/sprite-info.jsx';
@@ -17,9 +16,6 @@ import paintIcon from '../action-menu/icon--paint.svg';
 import spriteIcon from '../action-menu/icon--sprite.svg';
 import surpriseIcon from '../action-menu/icon--surprise.svg';
 import searchIcon from '../action-menu/icon--search.svg';
-
-import removeIcon from '../action-menu/icon--remove.svg';
-import internetIcon from '../action-menu/icon--internet.svg';
 
 const messages = defineMessages({
     addSpriteFromLibrary: {
@@ -41,27 +37,6 @@ const messages = defineMessages({
         id: 'gui.spriteSelector.addSpriteFromFile',
         description: 'Button to add a sprite in the target pane from file',
         defaultMessage: 'Upload Sprite'
-    },
-
-    uploadLocalFile: {
-        id: 'gui.spriteSelector.uploadLocalFile',
-        description: 'Button to upload a local file',
-        defaultMessage: 'Upload Local File'
-    },
-    uploadWebFile: {
-        id: 'gui.spriteSelector.uploadWebFile',
-        description: 'Button to upload a web file',
-        defaultMessage: 'Upload Web File'
-    },
-    removeFile: {
-        id: 'gui.spriteSelector.removeFile',
-        description: 'Button to remove an uploaded file',
-        defaultMessage: 'Remove File'
-    },
-    viewFiles: {
-        id: 'gui.spriteSelector.viewFiles',
-        description: 'Button to show the file viewer',
-        defaultMessage: 'View Files'
     }
 });
 
@@ -83,22 +58,15 @@ const SpriteSelectorComponent = function (props) {
         onExportSprite,
         onFileUploadClick,
         onNewSpriteClick,
-        onViewFilesClick,
         onPaintSpriteClick,
         onSelectSprite,
         onSpriteUpload,
-        onDataFileUpload,
-        onDataFileRemove,
-        onWebFileUpload,
-        onDataFileUploadClick,
         onSurpriseSpriteClick,
         raised,
         selectedId,
         spriteFileInput,
-        dataFileInput,
         sprites,
         stageSize,
-        showDataFileMenu,
         ...componentProps
     } = props;
     let selectedSprite = sprites[selectedId];
@@ -107,10 +75,6 @@ const SpriteSelectorComponent = function (props) {
         selectedSprite = {};
         spriteInfoDisabled = true;
     }
-
-    //Detect if data tools extensions is loaded
-    let hasDataTools = document.getElementsByClassName("scratchCategoryId-datatools").length > 0;
-
     return (
         <Box
             className={styles.spriteSelector}
@@ -148,47 +112,6 @@ const SpriteSelectorComponent = function (props) {
                 onExportSprite={onExportSprite}
                 onSelectSprite={onSelectSprite}
             />
-
-            {showDataFileMenu && <ActionMenu
-                className={styles.fileButton}
-                img={fileUploadIcon}
-                moreButtons={[
-                    {
-                        title: intl.formatMessage(messages.removeFile),
-                        img: removeIcon,
-                        onClick: onDataFileRemove,
-                        largeImg: true
-                    },
-                    {
-                        title: intl.formatMessage(messages.uploadWebFile),
-                        img: internetIcon,
-                        onClick: onWebFileUpload,
-                        fileAccept: '.csv, .xml, .json, application/json',
-                        fileChange: onDataFileUpload,
-                        fileInput: dataFileInput,
-                        fileMultiple: true,
-                        largeImg: true
-                    },
-                    {
-                        title: intl.formatMessage(messages.viewFiles),
-                        img: searchIcon,
-                        onClick: onViewFilesClick
-                    },
-                    {
-                        title: intl.formatMessage(messages.uploadLocalFile),
-                        img: fileUploadIcon,
-                        onClick: onDataFileUploadClick,
-                        fileAccept: '.csv, .xml, .json, application/json',
-                        fileChange: onDataFileUpload,
-                        fileInput: dataFileInput,
-                        fileMultiple: true
-                    }
-                ]}
-                title={intl.formatMessage(messages.uploadLocalFile)}
-                tooltipPlace={isRtl(intl.locale) ? 'right' : 'left'}
-                onClick={onDataFileUploadClick}
-            />}
-
             <ActionMenu
                 className={styles.addButton}
                 img={spriteIcon}
@@ -243,13 +166,9 @@ SpriteSelectorComponent.propTypes = {
     onExportSprite: PropTypes.func,
     onFileUploadClick: PropTypes.func,
     onNewSpriteClick: PropTypes.func,
-    onViewFilesClick: PropTypes.func,
     onPaintSpriteClick: PropTypes.func,
     onSelectSprite: PropTypes.func,
     onSpriteUpload: PropTypes.func,
-    onDataFileUpload: PropTypes.func,
-    onDataFileRemove: PropTypes.func,
-    onWebFileUpload: PropTypes.func,
     onSurpriseSpriteClick: PropTypes.func,
     raised: PropTypes.bool,
     selectedId: PropTypes.string,
@@ -270,15 +189,4 @@ SpriteSelectorComponent.propTypes = {
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired
 };
 
-const mapStateToProps = state => ({
-    // This is the button's mode, as opposed to the actual current state
-    showDataFileMenu: state.scratchGui.modals.dataFileMenu
-});
-const mapDispatchToProps = dispatch => ({
-
-});
-
-export default injectIntl(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SpriteSelectorComponent));
+export default injectIntl(SpriteSelectorComponent);

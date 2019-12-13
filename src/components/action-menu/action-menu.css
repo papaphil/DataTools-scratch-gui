@@ -123,11 +123,6 @@ button::-moz-focus-inner {
     height: calc($more-button-size - 1rem);
 }
 
-.more-icon-smaller {
-    width: calc($more-button-size - 1.25rem);
-    height: calc($more-button-size - 1.25rem);
-}
-
 .coming-soon .more-icon {
     opacity: 0.5;
 }
