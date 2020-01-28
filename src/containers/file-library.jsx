@@ -45,10 +45,10 @@ class FileLibrary extends React.PureComponent {
 
     componentDidMount () {
         // Allow the spinner to display before loading the content
-        let names = this.props.vm.getDataFileNames();
+        let names = this.props.vm.performExtensionAction('datatools', 'getDataFileNames');
         let data = [];
         if(names[0].tag !== "NO FILES UPLOADED") {
-            data = this.props.vm.getDataFileContents(names[0].tag);
+            data = this.props.vm.performExtensionAction('datatools', 'getDataFileContents', {name: names[0].tag});
         }
         else {
             names = [];
@@ -70,7 +70,7 @@ class FileLibrary extends React.PureComponent {
     handleFileNameClick(name) {
         let index = this.state.fileNames.map(tag => tag.tag).indexOf(name);
 
-        let data = this.props.vm.getDataFileContents(name);
+        let data = this.props.vm.performExtensionAction('datatools', 'getDataFileContents', name);
 
         this.setState({
             selectedFileIndex: index,
@@ -92,7 +92,8 @@ class FileLibrary extends React.PureComponent {
         let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
         let colName = this.getColumns()[col];
 
-        let newData = this.props.vm.updateDataFile(fileName, row, colName, value);
+        let newData = this.props.vm.performExtensionAction('datatools', 'updateDataFile', {fileName, row, colName, value});
+
         this.setState({ fileData: newData });
     }
 
@@ -112,7 +113,7 @@ class FileLibrary extends React.PureComponent {
 
         fileData.push(newRow);
         this.setState({ fileData });
-        this.props.vm.addDataFileRow(fileName);
+        this.props.vm.performExtensionAction('datatools', 'addDataFileRow', {fileName})
         this.forceUpdate();
     }
  
