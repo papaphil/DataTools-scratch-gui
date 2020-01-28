@@ -70,7 +70,7 @@ class FileLibrary extends React.PureComponent {
     handleFileNameClick(name) {
         let index = this.state.fileNames.map(tag => tag.tag).indexOf(name);
 
-        let data = this.props.vm.performExtensionAction('datatools', 'getDataFileContents', name);
+        let data = this.props.vm.performExtensionAction('datatools', 'getDataFileContents', {name});
 
         this.setState({
             selectedFileIndex: index,
