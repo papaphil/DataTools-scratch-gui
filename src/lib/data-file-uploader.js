@@ -159,7 +159,7 @@ const handleResult = function(results, fileName, onComplete) {
     return newRow;
   });
 
-  onComplete(fileName, parsedResults);
+  onComplete('datatools', 'addDataFile', {name: fileName, fileData: parsedResults});
 }
 
 /**

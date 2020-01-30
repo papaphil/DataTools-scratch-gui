@@ -162,7 +162,7 @@ class TargetPane extends React.Component {
         }, this.props.onCloseImporting);
     }
     handleDataFileUpload(e) {
-        handleDataFileUpload(e.target, this.props.vm.addDataFile, (msg) => alert("Error uploading file: " + msg));
+        handleDataFileUpload(e.target, this.props.vm.performExtensionAction, (msg) => alert("Error uploading file: " + msg));
     }
     setDataFileInput(input) {
         this.dataFileInput = input;
@@ -174,7 +174,7 @@ class TargetPane extends React.Component {
         let fileName = prompt("Enter the name of the file: ");
         if(fileName === null || fileName === "") return;
 
-        if(!this.props.vm.removeDataFile(fileName)) {
+        if(!this.props.vm.performExtensionAction('datatools', 'removeDataFile', { name: fileName })) {
             alert("File does not exist");
         }
     }
@@ -182,7 +182,7 @@ class TargetPane extends React.Component {
         let url = prompt("Enter URL: ");
         if(url === null || url === "") return;
 
-        handleWebFileUpload(url, this.props.vm.addDataFile, (msg) => alert("Error uploading file: " + msg));
+        handleWebFileUpload(url, this.props.vm.performExtensionAction, (msg) => alert("Error uploading file: " + msg));
     }
     setFileInput (input) {
         this.fileInput = input;

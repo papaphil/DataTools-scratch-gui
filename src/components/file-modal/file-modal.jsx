@@ -83,7 +83,7 @@ class FileModal extends React.PureComponent {
         {
             console.log(document.getElementById("url").value);
             this.setState({uploadingWeb: false});
-            handleWebFileUpload(document.getElementById("url").value, this.props.vm.addDataFile, (msg) => alert("Error uploading file: " + mssg));
+            handleWebFileUpload(document.getElementById("url").value, this.props.vm.performExtensionAction, (msg) => alert("Error uploading file: " + mssg));
             this.handleCancel();
         }
         else{
@@ -92,7 +92,7 @@ class FileModal extends React.PureComponent {
     }
 
     handleFileUpload(e) {
-        handleDataFileUpload(e.target, this.props.vm.addDataFile, (msg) => alert("Error uploading file: " + msg));
+        handleDataFileUpload(e.target, this.props.vm.performExtensionAction, (msg) => alert("Error uploading file: " + msg));
         this.handleClose();
     }
 
