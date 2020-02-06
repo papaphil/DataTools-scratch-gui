@@ -4,14 +4,13 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import ReactModal from 'react-modal';
 import VM from 'scratch-vm';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import {
     getIsError,
     getIsShowingProject
 } from '../reducers/project-state';
-import {setProjectTitle} from '../reducers/project-title';
 import {
     activateTab,
     BLOCKS_TAB_INDEX,
@@ -30,6 +29,7 @@ import {
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
 import ProjectFetcherHOC from '../lib/project-fetcher-hoc.jsx';
+import TitledHOC from '../lib/titled-hoc.jsx';
 import ProjectSaverHOC from '../lib/project-saver-hoc.jsx';
 import QueryParserHOC from '../lib/query-parser-hoc.jsx';
 import storage from '../lib/storage';
@@ -40,18 +40,9 @@ import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
 
-const messages = defineMessages({
-    defaultProjectTitle: {
-        id: 'gui.gui.defaultProjectTitle',
-        description: 'Default title for project',
-        defaultMessage: 'Scratch Project'
-    }
-});
-
 class GUI extends React.Component {
     componentDidMount () {
         setIsScratchDesktop(this.props.isScratchDesktop);
-        this.setReduxTitle(this.props.projectTitle);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
     }
@@ -59,22 +50,10 @@ class GUI extends React.Component {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
             this.props.onUpdateProjectId(this.props.projectId);
         }
-        if (this.props.projectTitle !== prevProps.projectTitle) {
-            this.setReduxTitle(this.props.projectTitle);
-        }
         if (this.props.isShowingProject && !prevProps.isShowingProject) {
             // this only notifies container when a project changes from not yet loaded to loaded
             // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
-        }
-    }
-    setReduxTitle (newTitle) {
-        if (newTitle === null || typeof newTitle === 'undefined') {
-            this.props.onUpdateReduxProjectTitle(
-                this.props.intl.formatMessage(messages.defaultProjectTitle)
-            );
-        } else {
-            this.props.onUpdateReduxProjectTitle(newTitle);
         }
     }
     render () {
@@ -93,11 +72,9 @@ class GUI extends React.Component {
             onProjectLoaded,
             onStorageInit,
             onUpdateProjectId,
-            onUpdateReduxProjectTitle,
             onVmInit,
             projectHost,
             projectId,
-            projectTitle,
             /* eslint-enable no-unused-vars */
             children,
             fetchingProject,
@@ -132,8 +109,6 @@ GUI.propTypes = {
     onSeeCommunity: PropTypes.func,
     onStorageInit: PropTypes.func,
     onUpdateProjectId: PropTypes.func,
-    onUpdateProjectTitle: PropTypes.func,
-    onUpdateReduxProjectTitle: PropTypes.func,
     onVmInit: PropTypes.func,
     projectHost: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -208,6 +183,7 @@ const WrappedGui = compose(
     FontLoaderHOC,
     QueryParserHOC,
     ProjectFetcherHOC,
+    TitledHOC,
     ProjectSaverHOC,
     vmListenerHOC,
     vmManagerHOC,
