@@ -1,3 +1,7 @@
+/*
+Created by: Alex Burroughs, Zachary Fernbaugh, Phillip Carroll, and Nathanael Hood with the KSU Scratch Data Tools group
+See LICENSE for more information.
+*/
 import Papa from 'papaparse';
 import convert from 'xml-js';
 
