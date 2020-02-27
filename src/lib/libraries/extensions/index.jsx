@@ -20,7 +20,7 @@ import text2speechInsetIconURL from './text2speech/text2speech-small.svg';
 import translateIconURL from './translate/translate.png';
 import translateInsetIconURL from './translate/translate-small.png';
 
-import dataToolsIconURL from './datatools/Scratch-02.svg';
+import dataToolsIconURL from './datatools/Scratch-02.png';
 import dataToolsInsetIconURL from './datatools/Scratch-01.svg';
 
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
