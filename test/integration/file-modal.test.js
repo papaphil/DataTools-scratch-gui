@@ -82,7 +82,7 @@ describe('data tools extension popup appearing properly', () =>{
     });
 
     //this one will fail right now because we have an issue with the file viewer
-    /*test('Trying to view files when none are uploaded', async () => {
+    test('Trying to view files when none are uploaded', async () => {
         await loadUri(uri);
         await clickXpath('//button[@title="Add Extension"]');
         await clickText('Tools');
@@ -96,7 +96,5 @@ describe('data tools extension popup appearing properly', () =>{
         await clickText('Back');//this line fails because we crash when the user clicks the view files. Might fail after fixing and have to change
         const logs = await getLogs();
         await expect(logs).toEqual([]);
-    });*/
-
-    test('')
+    });
 });
