@@ -54,6 +54,7 @@ class SeleniumHelper {
         const args = [];
         if (USE_HEADLESS) {
             args.push('--headless');
+            args.push('--no-sandbox');//I don't know if this is going to be needed for everyone but it is for my permissions to run tests
         }
 
         // Stub getUserMedia to always not allow access

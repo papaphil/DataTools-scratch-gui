@@ -45,7 +45,7 @@
     "babel-loader": "^8.0.4",
     "base64-loader": "1.0.0",
     "bowser": "1.9.4",
-    "chromedriver": "78.0.1",
+    "chromedriver": "80.0.1",
     "classnames": "2.2.6",
     "computed-style-to-inline-style": "3.0.0",
     "copy-webpack-plugin": "^4.5.1",
@@ -141,15 +141,6 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     }
-  },
-  "babel": {
-    "presets": [
-      "@babel/present-env",
-      "@babel/preset-react"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
-    ]
   },
   "dependencies": {
     "style-loader": "^1.0.0",
