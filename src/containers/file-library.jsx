@@ -123,7 +123,7 @@ class FileLibrary extends React.PureComponent {
  
     render () {
         let noFiles = this.state.fileNames.length === 0;
-        
+        let cols = this.getColumns();
         return (
             <Modal
                 fullScreen
@@ -156,7 +156,7 @@ class FileLibrary extends React.PureComponent {
                     <DataTable 
                         fileName={this.state.fileNames[this.state.selectedFileIndex].tag}
                         data={this.state.fileData} 
-                        header={this.getColumns()} 
+                        header={cols.length == 0?["NO COLUMNS"]: cols} 
                         onDataChange={this.handleDataChange}
                         onAddRow={this.handleAddRow}/>
                 )}
