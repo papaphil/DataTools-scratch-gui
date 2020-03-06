@@ -35,7 +35,8 @@ class FileLibrary extends React.PureComponent {
             'handleFileNameClick',
             'getColumns',
             'handleDataChange',
-            'handleAddRow'
+            'handleAddRow',
+            'handleAddColumn'
         ]);
 
         this.state = {
@@ -120,6 +121,44 @@ class FileLibrary extends React.PureComponent {
         this.props.vm.performExtensionAction('datatools', 'addDataFileRow', {fileName})
         this.forceUpdate();
     }
+
+    handleAddColumn(){
+        let { fileData } = this.state;
+        let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
+        let type = prompt('Enter the type of column you would like to add(word or number): ');
+        let name = prompt('Enter the name of the column you would like to add: ');
+        console.log(type);
+        if(type !='word' && type!='number')
+            return;
+        console.log("here");
+        if(fileData.length === 0){
+            fileData[0]={};
+            if(type == 'word'){
+                fileData[0][name] = '';
+            } 
+            else {
+                fileData[0][name] = 0;
+            }
+        }
+        else {
+            let i;
+            let rowCount = fileData.length;
+            if(type == 'word'){
+                for(i = 0; i < rowCount; i++){
+                    fileData[i][name] = '';
+                }
+            }
+            else{
+                for(i =0; i<rowCount; i++){
+                    fileData[i][name] = 0;
+                }
+            }
+        }
+        
+        this.setState({ fileData });
+        this.props.vm.performExtensionAction('datatools', 'addDataFileColumn', {type, name, fileName});
+        this.forceUpdate();
+    }
  
     render () {
         let noFiles = this.state.fileNames.length === 0;
@@ -158,7 +197,8 @@ class FileLibrary extends React.PureComponent {
                         data={this.state.fileData} 
                         header={cols.length == 0?["NO COLUMNS"]: cols} 
                         onDataChange={this.handleDataChange}
-                        onAddRow={this.handleAddRow}/>
+                        onAddRow={this.handleAddRow}
+                        onAddColumn={this.handleAddColumn}/>
                 )}
                 {this.state.loaded && noFiles && (
                     <div className={tableStyles.noFiles}>
