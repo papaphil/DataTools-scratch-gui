@@ -15,6 +15,7 @@ const MODAL_SOUND_LIBRARY = 'soundLibrary';
 const MODAL_SPRITE_LIBRARY = 'spriteLibrary';
 const MODAL_FILE_LIBRARY = 'fileLibrary';
 const MODAL_SOUND_RECORDER = 'soundRecorder';
+const DATA_FILE_MODAL = 'dataFileModal';
 const MODAL_CONNECTION = 'connectionModal';
 const MODAL_FILE = 'fileModal';
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
@@ -37,6 +38,7 @@ const initialState = {
     [MODAL_FILE_LIBRARY]: false,
     [MODAL_FILE]: false,
     [DATA_FILE_MENU]: false,
+    [DATA_FILE_MODAL]: false,
 };
 
 const reducer = function (state, action) {
@@ -96,6 +98,9 @@ const openFileLibrary = function() {
 const openSoundRecorder = function () {
     return openModal(MODAL_SOUND_RECORDER);
 };
+const openDataFileModal = function() {
+    return openModal(DATA_FILE_MODAL);
+}
 const openConnectionModal = function () {
     return openModal(MODAL_CONNECTION);
 };
@@ -135,6 +140,9 @@ const closeSoundLibrary = function () {
 const closeSoundRecorder = function () {
     return closeModal(MODAL_SOUND_RECORDER);
 };
+const closeDataFileModal = function () {
+    return closeModal(DATA_FILE_MODAL);
+}
 const closeTipsLibrary = function () {
     return closeModal(MODAL_TIPS_LIBRARY);
 };
@@ -161,6 +169,7 @@ export {
     openSpriteLibrary,
     openFileLibrary,
     openSoundRecorder,
+    openDataFileModal,
     openTelemetryModal,
     openTipsLibrary,
     openConnectionModal,
@@ -174,6 +183,7 @@ export {
     closeFileLibrary,
     closeSoundLibrary,
     closeSoundRecorder,
+    closeDataFileModal,
     closeTelemetryModal,
     closeTipsLibrary,
     closeConnectionModal,

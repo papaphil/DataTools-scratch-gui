@@ -26,7 +26,7 @@ import defineDynamicBlock from '../lib/define-dynamic-block';
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
 import {activateColorPicker} from '../reducers/color-picker';
-import {closeExtensionLibrary, openSoundRecorder, openConnectionModal, openFileModal, openDataFileMenu} from '../reducers/modals';
+import {closeExtensionLibrary, openSoundRecorder, openConnectionModal, openFileModal, openDataFileModal, openDataFileMenu} from '../reducers/modals';
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
 
@@ -62,6 +62,7 @@ class Blocks extends React.Component {
             'handleFileModalStart',
             'handleDrop',
             'handleStatusButtonUpdate',
+            'handleOpenDataFileModal',
             'handleOpenSoundRecorder',
             'handlePromptStart',
             'handlePromptCallback',
@@ -496,6 +497,9 @@ class Blocks extends React.Component {
     handleOpenSoundRecorder () {
         this.props.onOpenSoundRecorder();
     }
+    handleOpenDataFileModal () {
+        this.props.onOpenDataFileModal();
+    }
 
     /*
      * Pass along information about proposed name and variable options (scope and isCloud)
@@ -543,6 +547,7 @@ class Blocks extends React.Component {
             onOpenConnectionModal,
             onOpenFileModal,
             onOpenDataFileMenu,
+            onOpenDataFileModal,
             onOpenSoundRecorder,
             updateToolboxState,
             onActivateCustomProcedures,
@@ -606,6 +611,7 @@ Blocks.propTypes = {
     onOpenConnectionModal: PropTypes.func,
     onOpenFileModal: PropTypes.func,
     onOpenDataFileMenu: PropTypes.func,
+    onOpenDataFileModal: PropTypes.func,
     onOpenSoundRecorder: PropTypes.func,
     onRequestCloseCustomProcedures: PropTypes.func,
     onRequestCloseExtensionLibrary: PropTypes.func,
@@ -700,6 +706,9 @@ const mapDispatchToProps = dispatch => ({
     onOpenSoundRecorder: () => {
         dispatch(activateTab(SOUNDS_TAB_INDEX));
         dispatch(openSoundRecorder());
+    },
+    onOpenDataFileModal: () => {
+        dispatch(openDataFileModal());
     },
     onRequestCloseExtensionLibrary: () => {
         dispatch(closeExtensionLibrary());
