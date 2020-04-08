@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import VM from 'scratch-vm';
-
 import Modal from './modal.jsx';
 import Divider from '../components/divider/divider.jsx';
 import Filter from '../components/filter/filter.jsx';
@@ -18,7 +17,10 @@ import DataTable from '../components/file-library/data-table.jsx';
 
 import styles from '../components/library/library.css';
 import tableStyles from '../components/file-library/data-table.css';
+import DataFileModal from './dataFileModal.jsx';
+import {openDataFileModal} from '../reducers/modals';
 
+import {connect} from 'react-redux';
 const messages = defineMessages({
     libraryTitle: {
         defaultMessage: 'Choose a Sprite',
@@ -35,7 +37,11 @@ class FileLibrary extends React.PureComponent {
             'handleFileNameClick',
             'getColumns',
             'handleDataChange',
-            'handleAddRow'
+            'handleAddRow',
+            'handleAddColumn',
+            'handleNumberButton',
+            'handleWordButton',
+            'handleDataFileModalClose'
         ]);
 
         this.state = {
@@ -43,7 +49,11 @@ class FileLibrary extends React.PureComponent {
             fileData: [],
             filterQuery: '',
             selectedFileIndex: 0,
-            loaded: false
+            loaded: false,
+            DataFileModalVisible: false,
+            word: false,
+            number: false,
+            columnName: '',
         };
     }
 
@@ -120,10 +130,75 @@ class FileLibrary extends React.PureComponent {
         this.props.vm.performExtensionAction('datatools', 'addDataFileRow', {fileName})
         this.forceUpdate();
     }
+    handleNumberButton(){
+        this.state.number = true;
+        this.forceUpdate();
+    }
+    
+    handleDataFileModalClose(){
+        this.setState({DataFileModalVisible: false});
+        this.forceUpdate();
+    }
+
+    handleWordButton(){
+        this.state.word = true;
+
+        this.forceUpdate();
+    }
+    handleAddColumn(){
+        if(!this.state.DataFileModalVisible)
+        {
+            this.state.DataFileModalVisible = true;
+            this.forceUpdate();
+            return;
+        }    
+        let { fileData } = this.state;
+        let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
+        let type = this.state.word ? 'word' : 'number';
+        let name = document.getElementById("column").value; //want to change this to a modal
+        console.log(type);
+        if(type !='word' && type!='number')
+            return;
+        if(fileData.length === 0){
+            fileData[0]={};
+            if(type == 'word'){
+                fileData[0][name] = '';
+            } 
+            else {
+                fileData[0][name] = 0;
+            }
+        }
+        else {
+            if(fileData[0][name]){
+                alert("Column already exists, please try again with a different name");
+                return;
+            }
+            let i;
+            let rowCount = fileData.length;
+            if(type == 'word'){
+                for(i = 0; i < rowCount; i++){
+                    fileData[i][name] = '';
+                }
+            }
+            else{
+                for(i =0; i<rowCount; i++){
+                    fileData[i][name] = 0;
+                }
+            }
+        }
+        
+        this.setState({ fileData });
+        this.props.vm.performExtensionAction('datatools', 'addDataFileColumn', {type, name, fileName});
+        this.state.DataFileModalVisible = false;
+        this.state.columnName = '';
+        this.state.word = false;
+        this.state.number = false;
+        this.forceUpdate();
+    }
  
     render () {
         let noFiles = this.state.fileNames.length === 0;
-        
+        let cols = this.getColumns();
         return (
             <Modal
                 fullScreen
@@ -156,9 +231,10 @@ class FileLibrary extends React.PureComponent {
                     <DataTable 
                         fileName={this.state.fileNames[this.state.selectedFileIndex].tag}
                         data={this.state.fileData} 
-                        header={this.getColumns()} 
+                        header={cols.length == 0?["NO COLUMNS"]: cols} 
                         onDataChange={this.handleDataChange}
-                        onAddRow={this.handleAddRow}/>
+                        onAddRow={this.handleAddRow}
+                        onAddColumn={this.handleAddColumn}/>
                 )}
                 {this.state.loaded && noFiles && (
                     <div className={tableStyles.noFiles}>
@@ -179,6 +255,12 @@ class FileLibrary extends React.PureComponent {
                         />
                     </div>
                 )}
+                {this.state.DataFileModalVisible ? <DataFileModal 
+                handleNumberButton={this.handleNumberButton}
+                handleWordButton={this.handleWordButton}
+                columnName={(this.state.word || this.state.number)? true: false}
+                handleColumnName={this.handleAddColumn}
+                onClose={this.handleDataFileModalClose}/> : null}
             </div>
         </Modal>
         );
@@ -187,9 +269,17 @@ class FileLibrary extends React.PureComponent {
 
 FileLibrary.propTypes = {
     intl: intlShape.isRequired,
+    handleOpenDataFileModal: PropTypes.func.isRequired,
     onActivateBlocksTab: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
-export default injectIntl(FileLibrary);
+const mapDispatchToProps = dispatch => ({
+    handleOpenDataFileModal: () => {
+        dispatch(openDataFileModal());
+    }
+});
+
+export default injectIntl(connect(
+    mapDispatchToProps)(FileLibrary));

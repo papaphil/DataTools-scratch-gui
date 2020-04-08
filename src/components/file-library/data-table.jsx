@@ -205,6 +205,7 @@ class DataTable extends Component {
               <tr>
                 <td colSpan={HEADER_PAGE_SIZE + 1} className={styles.addRow}>
                   <button title="Add row" onClick={this.props.onAddRow}>+ Add Row</button>
+                  <button title="Add Column" onClick={this.props.onAddColumn}>+ Add Column</button>
                 </td>
               </tr>
             </tbody>
@@ -219,7 +220,8 @@ DataTable.propTypes = {
   data: PropTypes.array.isRequired,
   header: PropTypes.arrayOf(PropTypes.string).isRequired,
   onDataChange: PropTypes.func.isRequired,
-  onAddRow: PropTypes.func.isRequired
+  onAddRow: PropTypes.func.isRequired,
+  onAddColumn: PropTypes.func.isRequired
 }
 
 export default DataTable
