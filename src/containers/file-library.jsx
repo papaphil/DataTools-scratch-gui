@@ -130,21 +130,35 @@ class FileLibrary extends React.PureComponent {
         this.props.vm.performExtensionAction('datatools', 'addDataFileRow', {fileName})
         this.forceUpdate();
     }
+    /**
+     * sets the state for the user wanting the column to be a number column to be true to be passed to the vm
+     */
     handleNumberButton(){
         this.state.number = true;
         this.forceUpdate();
     }
     
+    /**
+     * closes the data file modal when the user is done
+     */
     handleDataFileModalClose(){
         this.setState({DataFileModalVisible: false});
         this.forceUpdate();
     }
 
+    /**
+     * sets the state for the user wanting the column to be a text column to be true to be passed to the vm
+     */
     handleWordButton(){
         this.state.word = true;
 
         this.forceUpdate();
     }
+
+    /**
+     * handler for adding a column
+     * updates the column on the gui side and then sends a request to the vm to update the backend as well to keep consistency 
+     */
     handleAddColumn(){
         if(!this.state.DataFileModalVisible)
         {
@@ -154,14 +168,13 @@ class FileLibrary extends React.PureComponent {
         }    
         let { fileData } = this.state;
         let fileName = this.state.fileNames[this.state.selectedFileIndex].tag;
-        let type = this.state.word ? 'word' : 'number';
+        let type = this.state.word ? 'text' : 'number';
         let name = document.getElementById("column").value; //want to change this to a modal
-        console.log(type);
-        if(type !='word' && type!='number')
+        if(type !='text' && type!='number')
             return;
         if(fileData.length === 0){
             fileData[0]={};
-            if(type == 'word'){
+            if(type == 'text'){
                 fileData[0][name] = '';
             } 
             else {
@@ -175,7 +188,7 @@ class FileLibrary extends React.PureComponent {
             }
             let i;
             let rowCount = fileData.length;
-            if(type == 'word'){
+            if(type == 'text'){
                 for(i = 0; i < rowCount; i++){
                     fileData[i][name] = '';
                 }

@@ -5,6 +5,7 @@ import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-int
 import Modal from '../../containers/modal.jsx';
 import styles from './general-dataTools-modal.css';
 
+// messages to be displayed by the modal
 const messages = defineMessages({
     bodyText1: {
         defaultMessage: 'Which type of column would you like to add?',
@@ -17,8 +18,8 @@ const messages = defineMessages({
         id: 'gui.addColumn.bodyText2'
     },
     wordButton: {
-        defaultMessage: 'Word',
-        description: 'Word',
+        defaultMessage: 'Text',
+        description: 'Text',
         id: 'gui.addColumn.wordButton'
     },
     numberButton: {
@@ -35,6 +36,11 @@ const messages = defineMessages({
 
 //possibly do a turnary off of a bool that gets updated in the general modal
 //have the button call a method that is passed in through the props that then sets the prop for here from false to true and boom
+
+
+// component for adding a column, 2 states
+// first state is asking for the type of column the user would like 
+// second state is asking for a name for the column being added
 const addColumn = props => {
     if(!props.columnName){
     return(<Box>

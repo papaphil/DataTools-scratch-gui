@@ -6,6 +6,7 @@ import Modal from '../../containers/modal.jsx';
 import styles from './general-dataTools-modal.css';
 import AddColumn from './addColumn.jsx';
 
+// Messages to be displayed in the modal
 const messages = defineMessages({
     title: {
         defaultMessage: 'Data Tools',
@@ -14,6 +15,8 @@ const messages = defineMessages({
     }
 });
 
+// The modal component that will switch states depending on a state prop being passed to it
+// currently only displays the add column modal
 const dataToolsModal = props => {
     
     return(<Modal

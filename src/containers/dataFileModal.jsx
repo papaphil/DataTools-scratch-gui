@@ -5,6 +5,10 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import DataFileModalComponent from '../components/general-dataTools-modal/general-dataTools-modal.jsx';
 import {closeDataFileModal} from '../reducers/modals';
+
+/**
+ * the container for the Data file modal 
+ */
 class DataFileModal extends React.Component {
     constructor(props){
         super(props);
@@ -19,7 +23,7 @@ class DataFileModal extends React.Component {
     handleCancel(){
         this.props.onClose();
     }
-    //all behavior is defined here and passed as a prop to the components
+   
     render () {
         return(
             <DataFileModalComponent 
@@ -43,9 +47,4 @@ const mapStateToProps = state => ({
     vm: state.scratchGui.vm
 });
 
-// const mapDispatchToProps = dispatch => ({
-//     onClose: () => {
-//         dispatch(closeDataFileModal());
-//     }
-// });
 export default connect(mapStateToProps)(DataFileModal);
