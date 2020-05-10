@@ -179,13 +179,13 @@ class DataTable extends Component {
                 onClick={() => this.handleSkip(false, false)}
               />}
               Showing columns {minPage} - {maxPage} of {header.length}
-              {maxPage <= (header.length - HEADER_PAGE_SIZE) && <img
+              {maxPage < (header.length) && <img
                 className={classNames(styles.skipIcon, styles.right)}
                 draggable={false}
                 src={skipIcon}
                 onClick={() => this.handleSkip(false, true)}
               />}
-              {maxPage <= (header.length - HEADER_PAGE_SIZE) && <img
+              {maxPage < (header.length) && <img
                 className={classNames(styles.skipIcon, styles.farRight)}
                 draggable={false}
                 src={largeSkipIcon}
